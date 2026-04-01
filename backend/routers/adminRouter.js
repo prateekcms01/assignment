@@ -8,7 +8,8 @@ router.post("/data/create-user", authController.createUser);
 router.post("/data/login", authController.loginUser);
 
 router.use(authController.protectUser);
-
+router.post("/data/createProvider", authController.createUser);
+router.get("/data/getProviders", authController.getProviders);
 router.get("/data/profile", adminController.getAdminProfile);
 
 router.post("/data/create-service", adminController.createService);

@@ -50,6 +50,23 @@ exports.createUser = catchAsyncError(async (req, res, next) => {
   });
 });
 
+exports.getProviders = catchAsyncError(async (req, res, next) => {
+  if (req.user.role !== "admin") {
+    return next(new AppError("Access denied. Admin only", 403));
+  }
+  const query = `
+    SELECT id, name, email, role, provider_id, created_at, updated_at
+    FROM users
+    WHERE role = 'provider'
+  `;
+  const providers = await db(query);
+
+  res.status(200).json({
+    success: true,
+    providers,
+  });
+});
+
 exports.loginUser = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
 
