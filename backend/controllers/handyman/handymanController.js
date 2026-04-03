@@ -8,8 +8,24 @@ exports.getHandymanProfile = catchAsyncError(async (req, res, next) => {
   if (req.user.role !== "handyman") {
     return next(new AppError("Access denied. Handyman only", 403));
   }
+
   const handymanId = req.user.id;
-  const query = "SELECT * FROM users WHERE id = ?";
+
+  const query = `
+    SELECT
+      h.id,
+      h.name,
+      h.email,
+      h.role,
+      h.provider_id,
+      h.created_at,
+      h.updated_at,
+      p.name AS provider_name
+    FROM users h
+    LEFT JOIN users p ON h.provider_id = p.id
+    WHERE h.id = ?
+  `;
+
   const handyman = await db(query, [handymanId]);
 
   if (handyman.length === 0) {

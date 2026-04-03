@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import AdminAuth from './components/AdminAuth';
-import AdminProfile from './components/AdminProfile';
-import ProviderAuth from './components/ProviderAuth';
-import ProviderProfile from './components/ProviderProfile';
-import HandymanAuth from './components/HandymanAuth';
-import HandymanProfile from './components/HandymanProfile';
+import React, { useState, useEffect } from "react";
+import AdminAuth from "./components/AdminAuth";
+import AdminProfile from "./components/AdminProfile";
+import ProviderAuth from "./components/ProviderAuth";
+import ProviderProfile from "./components/ProviderProfile";
+import HandymanAuth from "./components/HandymanAuth";
+import HandymanProfile from "./components/HandymanProfile";
 
 function App() {
   const [token, setToken] = useState(null);
-  const [role, setRole] = useState('admin'); 
+  const [role, setRole] = useState("admin");
 
   useEffect(() => {
-    // 1. Determine role from URL query param
     const params = new URLSearchParams(window.location.search);
-    const urlRole = params.get('role');
-    const activeRole = (urlRole === 'provider' || urlRole === 'handyman') ? urlRole : 'admin';
+    const urlRole = params.get("role");
+    const activeRole =
+      urlRole === "provider" || urlRole === "handyman" ? urlRole : "admin";
     setRole(activeRole);
 
-    // 2. Fetch the specific token for that role
     const storedToken = localStorage.getItem(`${activeRole}Token`);
     if (storedToken) {
       setToken(storedToken);
@@ -36,37 +35,43 @@ function App() {
   };
 
   const switchPortal = (targetRole) => {
-    const newUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + `?role=${targetRole}`;
-    window.open(newUrl, '_blank');
+    const newUrl =
+      window.location.protocol +
+      "//" +
+      window.location.host +
+      window.location.pathname +
+      `?role=${targetRole}`;
+    window.open(newUrl, "_blank");
   };
 
-  // Render Dashboards
   if (token) {
-    if (role === 'admin') return <AdminProfile token={token} onLogout={handleLogout} />;
-    if (role === 'provider') return <ProviderProfile token={token} onLogout={handleLogout} />;
-    if (role === 'handyman') return <HandymanProfile token={token} onLogout={handleLogout} />;
+    if (role === "admin")
+      return <AdminProfile token={token} onLogout={handleLogout} />;
+    if (role === "provider")
+      return <ProviderProfile token={token} onLogout={handleLogout} />;
+    if (role === "handyman")
+      return <HandymanProfile token={token} onLogout={handleLogout} />;
   }
 
-  // Render Auth Portals
   return (
     <div className="antialiased text-slate-200">
-      {role === 'handyman' ? (
-        <HandymanAuth 
-          onLogin={handleLogin} 
-          onSwitchToAdmin={() => switchPortal('admin')} 
-          onSwitchToProvider={() => switchPortal('provider')}
+      {role === "handyman" ? (
+        <HandymanAuth
+          onLogin={handleLogin}
+          onSwitchToAdmin={() => switchPortal("admin")}
+          onSwitchToProvider={() => switchPortal("provider")}
         />
-      ) : role === 'provider' ? (
-        <ProviderAuth 
-          onLogin={handleLogin} 
-          onSwitchToAdmin={() => switchPortal('admin')} 
-          onSwitchToHandyman={() => switchPortal('handyman')}
+      ) : role === "provider" ? (
+        <ProviderAuth
+          onLogin={handleLogin}
+          onSwitchToAdmin={() => switchPortal("admin")}
+          onSwitchToHandyman={() => switchPortal("handyman")}
         />
       ) : (
-        <AdminAuth 
-          onLogin={handleLogin} 
-          onSwitchToProvider={() => switchPortal('provider')} 
-          onSwitchToHandyman={() => switchPortal('handyman')}
+        <AdminAuth
+          onLogin={handleLogin}
+          onSwitchToProvider={() => switchPortal("provider")}
+          onSwitchToHandyman={() => switchPortal("handyman")}
         />
       )}
     </div>

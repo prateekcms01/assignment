@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from "../config";
 
 const AdminZone = ({ token }) => {
   const [zones, setZones] = useState([]);
@@ -17,7 +18,7 @@ const AdminZone = ({ token }) => {
   const fetchZones = async () => {
     setLoadingZones(true);
     try {
-      const response = await axios.get('http://localhost:3000/api/v1/admins/data/getadminZones', {
+      const response = await axios.get(`${API_BASE_URL}/api/v1/admins/data/getadminZones`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setZones(response.data.zones || response.data.data || []);
@@ -59,12 +60,12 @@ const AdminZone = ({ token }) => {
     setZoneSuccess('');
     try {
       if (isEditing) {
-        await axios.put(`http://localhost:3000/api/v1/admins/data/updateadminZone/${editingZoneId}`, zoneData, {
+        await axios.put(`${API_BASE_URL}/api/v1/admins/data/updateadminZone/${editingZoneId}`, zoneData, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setZoneSuccess('Zone updated successfully!');
       } else {
-        await axios.post('http://localhost:3000/api/v1/admins/data/createZone', zoneData, {
+        await axios.post(`${API_BASE_URL}/api/v1/admins/data/createZone`, zoneData, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setZoneSuccess('Zone created successfully!');
@@ -86,7 +87,7 @@ const AdminZone = ({ token }) => {
   const handleDeleteZone = async (id) => {
     if (!window.confirm('Are you sure you want to delete this zone? This action cannot be undone.')) return;
     try {
-      await axios.delete(`http://localhost:3000/api/v1/admins/data/deleteadminZone/${id}`, {
+      await axios.delete(`${API_BASE_URL}/api/v1/admins/data/deleteadminZone/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchZones();

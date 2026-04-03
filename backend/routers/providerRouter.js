@@ -6,6 +6,7 @@ const providerController = require("../controllers/provider/providerController")
 
 const adminauthController = require("../controllers/admin/authController");
 
+router.post("/data/createProvider", adminauthController.createUser);
 router.post("/data/loginProvider", authController.loginProvider);
 
 router.use(authController.protectProvider);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from "../config";
 
 const AdminProviders = ({ token }) => {
   const [providers, setProviders] = useState([]);
@@ -14,7 +15,7 @@ const AdminProviders = ({ token }) => {
   const fetchProviders = async () => {
     setLoadingProviders(true);
     try {
-      const response = await axios.get('http://localhost:3000/api/v1/admins/data/getProviders', {
+      const response = await axios.get(`${API_BASE_URL}/api/v1/admins/data/getProviders`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProviders(response.data.providers || response.data.data || []);
@@ -45,7 +46,7 @@ const AdminProviders = ({ token }) => {
     setProviderSuccess('');
     
     try {
-      await axios.post('http://localhost:3000/api/v1/admins/data/createProvider', providerData, {
+      await axios.post(`${API_BASE_URL}/api/v1/admins/data/createProvider`, providerData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProviderSuccess('Provider created successfully!');

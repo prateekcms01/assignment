@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from "../config";
 
 const AdminServices = ({ token }) => {
   const [services, setServices] = useState([]);
@@ -17,7 +18,7 @@ const AdminServices = ({ token }) => {
   const fetchServices = async () => {
     setLoadingServices(true);
     try {
-      const response = await axios.get('http://localhost:3000/api/v1/admins/data/getadminServices', {
+      const response = await axios.get(`${API_BASE_URL}/api/v1/admins/data/getadminServices`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setServices(response.data.services || response.data.data || []);
@@ -59,12 +60,12 @@ const AdminServices = ({ token }) => {
     setServiceSuccess('');
     try {
       if (isEditing) {
-        await axios.put(`http://localhost:3000/api/v1/admins/data/update-service/${editingServiceId}`, serviceData, {
+        await axios.put(`${API_BASE_URL}/api/v1/admins/data/update-service/${editingServiceId}`, serviceData, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setServiceSuccess('Service updated successfully!');
       } else {
-        await axios.post('http://localhost:3000/api/v1/admins/data/create-service', serviceData, {
+        await axios.post(`${API_BASE_URL}/api/v1/admins/data/create-service`, serviceData, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setServiceSuccess('Service created successfully!');
@@ -86,7 +87,7 @@ const AdminServices = ({ token }) => {
   const handleDeleteService = async (id) => {
     if (!window.confirm('Are you sure you want to delete this service? This action cannot be undone.')) return;
     try {
-      await axios.delete(`http://localhost:3000/api/v1/admins/data/delete-service/${id}`, {
+      await axios.delete(`${API_BASE_URL}/api/v1/admins/data/delete-service/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchServices();
